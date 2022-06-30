@@ -5,6 +5,8 @@ using UnityEngine;
 public class GameBoard : MonoBehaviour
 {
 
+    Queue<GameTile> searchFrontier = new Queue<GameTile>();
+
     [SerializeField]
     Transform ground = default;
 
@@ -21,18 +23,50 @@ public class GameBoard : MonoBehaviour
 
         Vector2 offset = new Vector2((size.x - 1) * 0.5f, (size.y - 1) * 0.5f);
         tiles = new GameTile[size.x * size.y];
-        for (int i = 0, y = 0; y < size.y; y++, i++)
+        for (int i = 0, y = 0; y < size.y; y++)
         {
-            for (int x = 0; x < size.x; x++)
+            for (int x = 0; x < size.x; x++, i++)
             {
                 GameTile tile = tiles[i] = Instantiate(tilePrefab);
                 tile.transform.SetParent(transform, false);
-                tile.transform.localPosition = new Vector3(
-                    x - offset.x, 0f, y - offset.y
-                );
+                tile.transform.localPosition = new Vector3(x - offset.x, 0f, y - offset.y);
+                if (x > 0)
+                {
+                    GameTile.MakeEastWestNeighbors(tile, tiles[i - 1]);
+                }
+                if (y > 0)
+                {
+                    GameTile.MakeNorthSouthNeighbors(tile, tiles[i - size.x]);
+                }
             }
         }
 
+        FindPaths();
+    }
+
+    void FindPaths()
+    {
+        foreach (GameTile tile in tiles)
+        {
+            tile.ClearPath();
+        }
+        tiles[0].BecomeDestination();
+        searchFrontier.Enqueue(tiles[0]);
+        while (searchFrontier.Count > 0)
+        {
+            GameTile tile = searchFrontier.Dequeue();
+            if (tile != null)
+            {
+                searchFrontier.Enqueue(tile.GrowPathNorth());
+                searchFrontier.Enqueue(tile.GrowPathEast());
+                searchFrontier.Enqueue(tile.GrowPathSouth());
+                searchFrontier.Enqueue(tile.GrowPathWest());
+            }
+        }
+        foreach (GameTile tile in tiles)
+        {
+            tile.ShowPath();
+        }
     }
 
 }
