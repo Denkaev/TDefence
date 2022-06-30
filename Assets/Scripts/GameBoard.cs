@@ -38,6 +38,11 @@ public class GameBoard : MonoBehaviour
                 {
                     GameTile.MakeNorthSouthNeighbors(tile, tiles[i - size.x]);
                 }
+                tile.IsAlternative = (x & 1) == 0;
+                if ((y & 1) == 0)
+                {
+                    tile.IsAlternative = !tile.IsAlternative;
+                }
             }
         }
 
@@ -50,17 +55,27 @@ public class GameBoard : MonoBehaviour
         {
             tile.ClearPath();
         }
-        tiles[0].BecomeDestination();
-        searchFrontier.Enqueue(tiles[0]);
+        tiles[tiles.Length / 2].BecomeDestination();
+        searchFrontier.Enqueue(tiles[tiles.Length / 2]);
         while (searchFrontier.Count > 0)
         {
             GameTile tile = searchFrontier.Dequeue();
             if (tile != null)
             {
+                if (tile.IsAlternative)
+                {
                 searchFrontier.Enqueue(tile.GrowPathNorth());
-                searchFrontier.Enqueue(tile.GrowPathEast());
                 searchFrontier.Enqueue(tile.GrowPathSouth());
+                searchFrontier.Enqueue(tile.GrowPathEast());
                 searchFrontier.Enqueue(tile.GrowPathWest());
+                }
+                else
+                {
+                    searchFrontier.Enqueue(tile.GrowPathWest());
+                    searchFrontier.Enqueue(tile.GrowPathEast());
+                    searchFrontier.Enqueue(tile.GrowPathSouth());
+                    searchFrontier.Enqueue(tile.GrowPathNorth());
+                }
             }
         }
         foreach (GameTile tile in tiles)

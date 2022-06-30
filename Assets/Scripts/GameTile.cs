@@ -24,6 +24,8 @@ public class GameTile : MonoBehaviour
     southRotation = Quaternion.Euler(90f, 180f, 0f),
     westRotation = Quaternion.Euler(90f, 270f, 0f);
 
+    public bool IsAlternative { get; set; }
+
     public static void MakeEastWestNeighbors(GameTile east, GameTile west)
     {
         Debug.Assert(west.east == null && east.west == null, "Redefined neighbors!");
