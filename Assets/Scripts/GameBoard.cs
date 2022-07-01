@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class GameBoard : MonoBehaviour
 {
 
@@ -64,10 +65,10 @@ public class GameBoard : MonoBehaviour
             {
                 if (tile.IsAlternative)
                 {
-                searchFrontier.Enqueue(tile.GrowPathNorth());
-                searchFrontier.Enqueue(tile.GrowPathSouth());
-                searchFrontier.Enqueue(tile.GrowPathEast());
-                searchFrontier.Enqueue(tile.GrowPathWest());
+                    searchFrontier.Enqueue(tile.GrowPathNorth());
+                    searchFrontier.Enqueue(tile.GrowPathSouth());
+                    searchFrontier.Enqueue(tile.GrowPathEast());
+                    searchFrontier.Enqueue(tile.GrowPathWest());
                 }
                 else
                 {
@@ -83,5 +84,17 @@ public class GameBoard : MonoBehaviour
             tile.ShowPath();
         }
     }
-
+    public GameTile GetTile(Ray ray)
+    {
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            int x = (int)(hit.point.x + size.x * 0.5f);
+            int y = (int)(hit.point.z + size.y * 0.5f);
+            if (x >= 0 && x < size.x && y >= 0 && y < size.y)
+            {
+                return tiles[x + y * size.x];
+            }
+        }
+        return null;
+    }
 }
