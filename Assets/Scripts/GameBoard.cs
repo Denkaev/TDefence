@@ -96,8 +96,8 @@ public class GameBoard : MonoBehaviour
             }
         }
 
-        //FindPaths();
         ToggleDestination(tiles[tiles.Length / 2]);
+        //FindPaths();
     }
 
     public bool FindPaths()
