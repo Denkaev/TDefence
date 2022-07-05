@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameBoard : MonoBehaviour
 {
-    bool showGrid, showPaths;
+    bool showGrid, showPaths = true;
     List<GameTile> spawnPoints = new List<GameTile>();
     public int SpawnPointCount => spawnPoints.Count;
     public bool ShowPaths
