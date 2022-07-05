@@ -6,6 +6,8 @@ using UnityEngine;
 public class GameBoard : MonoBehaviour
 {
     bool showGrid, showPaths;
+    List<GameTile> spawnPoints = new List<GameTile>();
+    public int SpawnPointCount => spawnPoints.Count;
     public bool ShowPaths
     {
         get => showPaths;
@@ -97,7 +99,7 @@ public class GameBoard : MonoBehaviour
         }
 
         ToggleDestination(tiles[tiles.Length / 2]);
-        //FindPaths();
+        ToggleSpawnPoint(tiles[0]);
     }
 
     public bool FindPaths()
@@ -199,5 +201,26 @@ public class GameBoard : MonoBehaviour
             tile.Content = contentFactory.Get(GameTileContentType.Wall);
             FindPaths();
         }
+    }
+    public void ToggleSpawnPoint(GameTile tile)
+    {
+        if (tile.Content.Type == GameTileContentType.SpawnPoint)
+        {
+            if (spawnPoints.Count > 1)
+            {
+                spawnPoints.Remove(tile);
+                tile.Content = contentFactory.Get(GameTileContentType.Empty);
+            }
+        }
+        else if (tile.Content.Type == GameTileContentType.Empty)
+        {
+            tile.Content = contentFactory.Get(GameTileContentType.SpawnPoint);
+            spawnPoints.Add(tile);
+        }
+    }
+
+    public GameTile GetSpawnPoint(int index)
+    {
+        return spawnPoints[index];
     }
 }

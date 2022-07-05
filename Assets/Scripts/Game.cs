@@ -57,7 +57,7 @@ public class Game : MonoBehaviour
         GameTile tile = board.GetTile(TouchRay);
         if (tile != null)
         {
-            board.ToggleWall(tile);
+                board.ToggleWall(tile);
         }
     }
     void HandleAlternativeTouch()
@@ -65,7 +65,15 @@ public class Game : MonoBehaviour
         GameTile tile = board.GetTile(TouchRay);
         if (tile != null)
         {
-            board.ToggleDestination(tile);
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+
+                board.ToggleDestination(tile);
+            }
+            else
+            {
+                board.ToggleSpawnPoint(tile);
+            }
         }
     }
 }
