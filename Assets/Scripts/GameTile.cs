@@ -6,8 +6,7 @@ public class GameTile : MonoBehaviour
 {
     GameTileContent content;
 
-    public enum Direction { North, East, South, West }
-
+    
     public Direction PathDirection { get; private set; }
     public GameTile NextTileOnPath => nextOnPath;
 
@@ -36,10 +35,10 @@ public class GameTile : MonoBehaviour
 
     public bool HasPath => distance != int.MaxValue;
 
-    public GameTile GrowPathNorth() => GrowPathTo(north);
-    public GameTile GrowPathEast() => GrowPathTo(east);
-    public GameTile GrowPathSouth() => GrowPathTo(south);
-    public GameTile GrowPathWest() => GrowPathTo(west);
+    public GameTile GrowPathNorth() => GrowPathTo(north, Direction.South);
+    public GameTile GrowPathEast() => GrowPathTo(east, Direction.West);
+    public GameTile GrowPathSouth() => GrowPathTo(south, Direction.North);
+    public GameTile GrowPathWest() => GrowPathTo(west, Direction.East);
 
     static Quaternion
     northRotation = Quaternion.Euler(90f, 0f, 0f),
@@ -75,7 +74,7 @@ public class GameTile : MonoBehaviour
         nextOnPath = null;
         ExitPoint = transform.localPosition;
     }
-    GameTile GrowPathTo(GameTile neighbor)
+    GameTile GrowPathTo(GameTile neighbor, Direction direction)
     {
         Debug.Assert(HasPath, "No path!");
         if (neighbor == null || neighbor.HasPath)
@@ -85,6 +84,7 @@ public class GameTile : MonoBehaviour
         neighbor.distance = distance + 1;
         neighbor.nextOnPath = this;
         neighbor.ExitPoint = (neighbor.transform.localPosition + transform.localPosition) * 0.5f;
+        neighbor.PathDirection = direction;
         return neighbor.Content.Type != GameTileContentType.Wall ? neighbor : null;
     }
     public void ShowPath()
