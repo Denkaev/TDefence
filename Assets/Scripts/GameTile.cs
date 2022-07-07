@@ -6,7 +6,12 @@ public class GameTile : MonoBehaviour
 {
     GameTileContent content;
 
+    public enum Direction { North, East, South, West }
+
+    public Direction PathDirection { get; private set; }
     public GameTile NextTileOnPath => nextOnPath;
+
+    public Vector3 ExitPoint { get; private set; }
     public GameTileContent Content
     {
         get => content;
@@ -68,6 +73,7 @@ public class GameTile : MonoBehaviour
     {
         distance = 0;
         nextOnPath = null;
+        ExitPoint = transform.localPosition;
     }
     GameTile GrowPathTo(GameTile neighbor)
     {
@@ -78,6 +84,7 @@ public class GameTile : MonoBehaviour
         }
         neighbor.distance = distance + 1;
         neighbor.nextOnPath = this;
+        neighbor.ExitPoint = (neighbor.transform.localPosition + transform.localPosition) * 0.5f;
         return neighbor.Content.Type != GameTileContentType.Wall ? neighbor : null;
     }
     public void ShowPath()

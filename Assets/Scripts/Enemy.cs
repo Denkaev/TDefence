@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour
         tileFrom = tile;
         tileTo = tile.NextTileOnPath;
         positionFrom = tileFrom.transform.localPosition;
-        positionTo = tileTo.transform.localPosition;
+        positionTo = tileFrom.ExitPoint;
         progress = 0f;
     }
 
@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour
                 return false;
             }
             positionFrom = positionTo;
-            positionTo = tileTo.transform.localPosition;
+            positionTo = tileFrom.ExitPoint;
             progress -= 1f;
         }
         transform.localPosition = Vector3.LerpUnclamped(positionFrom, positionTo, progress);
