@@ -5,6 +5,8 @@ using UnityEngine;
 public class GameTile : MonoBehaviour
 {
     GameTileContent content;
+
+    public GameTile NextTileOnPath => nextOnPath;
     public GameTileContent Content
     {
         get => content;
