@@ -30,7 +30,7 @@ public class GameBoard : MonoBehaviour
             }
         }
     }
-    
+
     public bool ShowGrid
     {
         get => showGrid;
@@ -159,7 +159,7 @@ public class GameBoard : MonoBehaviour
     }
     public GameTile GetTile(Ray ray)
     {
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, 1))
         {
             int x = (int)(hit.point.x + size.x * 0.5f);
             int y = (int)(hit.point.z + size.y * 0.5f);
