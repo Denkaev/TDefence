@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[SelectionBase]
 public class GameTileContent : MonoBehaviour
 {
     GameTileContentFactory originFactory;
@@ -27,6 +28,8 @@ public class GameTileContent : MonoBehaviour
     {
         originFactory.Reclaim(this);
     }
+
+    public virtual void GameUpdate() { }
 
 }
 public enum GameTileContentType
