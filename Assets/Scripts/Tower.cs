@@ -2,69 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tower : GameTileContent
+public abstract class Tower : GameTileContent
 {
-    [SerializeField, Range(1f, 100f)]
-    float damagePerSecond = 10f;
 
     [SerializeField, Range(1.5f, 10.5f)]
-    float targetingRange = 1.5f;
-
-    [SerializeField]
-    Transform turret = default, laserBeam = default;
-
-    TargetPoint target;
+    protected float targetingRange = 1.5f;
 
     const int enemyLayerMask = 1 << 9;
 
     static Collider[] targetsBuffer = new Collider[100];
 
-    Vector3 laserBeamScale;
-    void Awake()
-    {
-        laserBeamScale = laserBeam.localScale;
-    }
-    public override void GameUpdate()
-    {
-        if (TrackTarget() || AcquireTarget())
-        {
-            Shoot();
-        }
-        else
-        {
-            laserBeam.localScale = Vector3.zero;
-        }
-    }
-    void Shoot()
-    {
-        Vector3 point = target.Position;
-        turret.LookAt(point);
-        laserBeam.localRotation = turret.localRotation;
-        float d = Vector3.Distance(turret.position, point);
-        laserBeamScale.z = d;
-        laserBeam.localScale = laserBeamScale;
-        laserBeam.localPosition = turret.localPosition + 0.5f * d * laserBeam.forward;
-        target.Enemy.ApplyDamage(damagePerSecond * Time.deltaTime);
-    }
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Vector3 position = transform.localPosition;
-        position.y += 0.01f;
-        Gizmos.DrawWireSphere(position, targetingRange);
-        if (target != null)
-        {
-            Gizmos.DrawLine(position, target.Position);
-        }
-    }
-    bool AcquireTarget()
+    public abstract TowerType TowerType { get; }
+
+
+    protected bool AcquireTarget(out TargetPoint target)
     {
         Vector3 a = transform.localPosition;
         Vector3 b = a;
         b.y += 2f;
-        int hits = Physics.OverlapCapsuleNonAlloc(
-            a, b, targetingRange, targetsBuffer, enemyLayerMask
-        );
+        int hits = Physics.OverlapCapsuleNonAlloc(a, b, targetingRange, targetsBuffer, enemyLayerMask);
         if (hits > 0)
         {
             target = targetsBuffer[Random.Range(0, hits)].GetComponent<TargetPoint>();
@@ -74,7 +30,7 @@ public class Tower : GameTileContent
         target = null;
         return false;
     }
-    bool TrackTarget()
+    protected bool TrackTarget(ref TargetPoint target)
     {
         if (target == null)
         {
@@ -92,5 +48,16 @@ public class Tower : GameTileContent
         }
         return true;
     }
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Vector3 position = transform.localPosition;
+        position.y += 0.01f;
+        Gizmos.DrawWireSphere(position, targetingRange);
+    }
 
+}
+public enum TowerType
+{
+    Laser, Mortar
 }
