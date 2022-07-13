@@ -11,6 +11,19 @@ public class MortarTower : Tower
     [SerializeField]
     Transform mortar = default;
 
+    float launchSpeed;
+
+    private void Awake()
+    {
+        OnValidate();
+    }
+
+    private void OnValidate()
+    {
+        float x = targetingRange + 0.25001f;
+        float y = -mortar.position.y;
+        launchSpeed = Mathf.Sqrt(9.81f * (y + Mathf.Sqrt(x * x + y * y)));
+    }
     public override TowerType TowerType => TowerType.Mortar;
 
     public override void GameUpdate()
@@ -34,10 +47,11 @@ public class MortarTower : Tower
         float y = -launchPoint.y;
         dir /= x;
         float g = 9.81f;
-        float s = 5f;
+        float s = launchSpeed;
         float s2 = s * s;
 
         float r = s2 * s2 - g * (g * x * x + 2f * y * s2);
+        Debug.Assert(r >= 0f, "Launch velocity insufficient for range!");
         float tanTheta = (s2 + Mathf.Sqrt(r)) / (g * x);
         float cosTheta = Mathf.Cos(Mathf.Atan(tanTheta));
         float sinTheta = cosTheta * tanTheta;
@@ -54,5 +68,5 @@ public class MortarTower : Tower
         Debug.DrawLine(launchPoint, targetPoint, Color.yellow);
         Debug.DrawLine(new Vector3(launchPoint.x, 0.01f, launchPoint.z), new Vector3(launchPoint.x + dir.x * x, 0.01f, launchPoint.z + dir.y * x), Color.white);
     }
-
+    
 }
