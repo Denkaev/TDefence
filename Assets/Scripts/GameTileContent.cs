@@ -1,38 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [SelectionBase]
-public class GameTileContent : MonoBehaviour
-{
-    GameTileContentFactory originFactory;
-    
-    [SerializeField]
-    GameTileContentType type = default;
+public class GameTileContent : MonoBehaviour {
 
-    public GameTileContentType Type => type;
+	[SerializeField]
+	GameTileContentType type = default;
 
-    public bool BlocksPath => Type == GameTileContentType.Wall || Type == GameTileContentType.Tower;
+	GameTileContentFactory originFactory;
 
-    public GameTileContentFactory OriginFactory
-    {
-        get => originFactory;
-        set
-        {
-            Debug.Assert(originFactory == null, "Redefined origin factory!");
-            originFactory = value;
-        }
-    }
+	public bool BlocksPath =>
+		Type == GameTileContentType.Wall || Type == GameTileContentType.Tower;
 
-    public void Recycle()
-    {
-        originFactory.Reclaim(this);
-    }
+	public GameTileContentType Type => type;
 
-    public virtual void GameUpdate() { }
+	public GameTileContentFactory OriginFactory {
+		get => originFactory;
+		set {
+			Debug.Assert(originFactory == null, "Redefined origin factory!");
+			originFactory = value;
+		}
+	}
 
-}
-public enum GameTileContentType
-{
-    Empty, Destination, Wall, SpawnPoint, Tower
+	public void Recycle () {
+		originFactory.Reclaim(this);
+	}
+
+	public virtual void GameUpdate () { }
 }

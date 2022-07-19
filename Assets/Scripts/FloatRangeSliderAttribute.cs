@@ -1,15 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class FloatRangeSliderAttribute : PropertyAttribute
-{
-    public float Min { get; private set; }
-    public float Max { get; private set; }
+public class FloatRangeSliderAttribute : PropertyAttribute {
 
-    public FloatRangeSliderAttribute(float min, float max)
-    {
-        Min = min;
-        Max = max < min ? min : max;
-    }
+	public float Min { get; private set; }
+
+	public float Max { get; private set; }
+
+	public FloatRangeSliderAttribute (float min, float max) {
+		Min = min;
+		Max = max < min ? min : max;
+	}
 }

@@ -185,7 +185,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8036915570586635804}
-  - component: {fileID: 8984240287003492239}
+  - component: {fileID: 5778339886864133078}
   m_Layer: 0
   m_Name: MortarTower
   m_TagString: Untagged
@@ -210,7 +210,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8984240287003492239
+--- !u!114 &5778339886864133078
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -219,12 +219,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 5104394001800695469}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b78cb2323138e9c46b4dd0fd9d717b4d, type: 3}
+  m_Script: {fileID: 11500000, guid: 42fef2bd9e6dff640b806d1efedc39c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 4
   targetingRange: 3.5
   shotsPerSecond: 1
+  shellBlastRadius: 1.5
+  shellDamage: 15
   mortar: {fileID: 7029758025656592572}
 --- !u!1 &6308785759120065088
 GameObject:
