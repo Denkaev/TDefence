@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6ed9207b52e6116488bf872dba139477, type: 3}
-  m_Name: Enemy Factory
+  m_Name: Enemy Cube Factory
   m_EditorClassIdentifier: 
   small:
     prefab: {fileID: 2180444551554401875, guid: 2edf689ef54447f49865d02add056998, type: 3}
