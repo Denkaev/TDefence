@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6ed9207b52e6116488bf872dba139477, type: 3}
-  m_Name: Enemy Cube Factory
+  m_Name: Enemy Shere Factory
   m_EditorClassIdentifier: 
   small:
-    prefab: {fileID: 2180444551554401875, guid: 65d72863ea4966545b2521085adafad9, type: 3}
+    prefab: {fileID: 2180444551554401875, guid: 2edf689ef54447f49865d02add056998, type: 3}
     scale:
       min: 0.5
       max: 0.6
@@ -27,7 +27,7 @@ MonoBehaviour:
       min: 40
       max: 50
   medium:
-    prefab: {fileID: 2180444551554401875, guid: 6f767e3a2a9758748aa62990a52fabc7, type: 3}
+    prefab: {fileID: 2180444551554401875, guid: 8940772b225ffe740b2175c2b3e79865, type: 3}
     scale:
       min: 0.9
       max: 1
@@ -41,7 +41,7 @@ MonoBehaviour:
       min: 90
       max: 120
   large:
-    prefab: {fileID: 2180444551554401875, guid: 952388782232f524fb0e9c6f22d252f5, type: 3}
+    prefab: {fileID: 2180444551554401875, guid: 3d987fced2ca9004b8fbb1891ac18423, type: 3}
     scale:
       min: 1.2
       max: 1.4

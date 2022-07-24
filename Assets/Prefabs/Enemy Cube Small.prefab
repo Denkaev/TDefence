@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 8075690177893810632}
   - component: {fileID: 2180444551554401875}
   m_Layer: 9
-  m_Name: Enemy Small
+  m_Name: Enemy Cube Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

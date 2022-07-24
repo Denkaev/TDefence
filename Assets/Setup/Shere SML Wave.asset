@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46e5d4fbbdb38f5428dfd62304eaca2a, type: 3}
+  m_Name: Shere SML Wave
+  m_EditorClassIdentifier: 
+  spawnSequences:
+  - factory: {fileID: 11400000, guid: fe5f9e1cd6c11bc48b0deb833f68c5ed, type: 2}
+    type: 0
+    amount: 10
+    cooldown: 0.5
+  - factory: {fileID: 11400000, guid: fe5f9e1cd6c11bc48b0deb833f68c5ed, type: 2}
+    type: 1
+    amount: 5
+    cooldown: 1
+  - factory: {fileID: 11400000, guid: fe5f9e1cd6c11bc48b0deb833f68c5ed, type: 2}
+    type: 2
+    amount: 1
+    cooldown: 5
