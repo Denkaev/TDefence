@@ -16,4 +16,35 @@ public class EnemySpawnSequence
 
     [SerializeField, Range(0.1f, 10f)]
     float cooldown = 1f;
+
+    public State Begin() => new State(this);
+
+    [System.Serializable]
+    public struct State
+    {
+        EnemySpawnSequence sequence;
+        int count;
+        float cooldown;
+        public State(EnemySpawnSequence sequence)
+        {
+            this.sequence = sequence;
+            count = 0;
+            cooldown = sequence.cooldown;
+        }
+
+        public float Progress(float deltaTime)
+        {
+            cooldown += deltaTime;
+            while (cooldown >= sequence.cooldown)
+            {
+                cooldown -= sequence.cooldown;
+                if (count >= sequence.amount)
+                {
+                    return cooldown;
+                }
+                count += 1;
+            }
+            return -1f;
+        }
+    }
 }
