@@ -471,12 +471,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a70e4b82d022aa14d8572d1ce11d3a76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scenario: {fileID: 11400000, guid: 34c35f5a9a87dc440a2cfb3e9e1a5126, type: 2}
   boardSize: {x: 11, y: 11}
   board: {fileID: 1282111328}
   tileContentFactory: {fileID: 11400000, guid: b34072a555b200947a32951ae71cdc81, type: 2}
-  enemyFactory: {fileID: 11400000, guid: fe5f9e1cd6c11bc48b0deb833f68c5ed, type: 2}
   warFactory: {fileID: 11400000, guid: 2a5aa5b4bbd1161448b930a2c111b7c8, type: 2}
-  spawnSpeed: 4
 --- !u!4 &1826781393
 Transform:
   m_ObjectHideFlags: 0

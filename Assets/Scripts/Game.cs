@@ -2,7 +2,12 @@ using UnityEngine;
 
 public class Game : MonoBehaviour {
 
-	[SerializeField]
+    [SerializeField]
+    GameScenario scenario = default;
+
+    GameScenario.State activeScenario;
+
+    [SerializeField]
 	Vector2Int boardSize = new Vector2Int(11, 11);
 
 	[SerializeField]
@@ -42,6 +47,7 @@ public class Game : MonoBehaviour {
 	void Awake () {
 		board.Initialize(boardSize, tileContentFactory);
 		board.ShowGrid = true;
+        activeScenario = scenario.Begin();
 	}
 
 	void OnValidate () {
@@ -74,7 +80,7 @@ public class Game : MonoBehaviour {
 		else if (Input.GetKeyDown(KeyCode.Alpha2)) {
 			selectedTowerType = TowerType.Mortar;
 		}
-
+        activeScenario.Progress();
 		enemies.GameUpdate();
 		Physics.SyncTransforms();
 		board.GameUpdate();
