@@ -12,15 +12,7 @@ public class Game : MonoBehaviour {
 	GameTileContentFactory tileContentFactory = default;
 
 	[SerializeField]
-	EnemyFactory enemyFactory = default;
-
-	[SerializeField]
 	WarFactory warFactory = default;
-
-	[SerializeField, Range(0.1f, 10f)]
-	float spawnSpeed = 1f;
-
-	float spawnProgress;
 
 	TowerType selectedTowerType;
 
@@ -83,11 +75,6 @@ public class Game : MonoBehaviour {
 			selectedTowerType = TowerType.Mortar;
 		}
 
-		spawnProgress += spawnSpeed * Time.deltaTime;
-		while (spawnProgress >= 1f) {
-			spawnProgress -= 1f;
-			SpawnEnemy();
-		}
 		enemies.GameUpdate();
 		Physics.SyncTransforms();
 		board.GameUpdate();
@@ -118,11 +105,10 @@ public class Game : MonoBehaviour {
 		}
 	}
 
-	void SpawnEnemy () {
-		GameTile spawnPoint =
-			board.GetSpawnPoint(Random.Range(0, board.SpawnPointCount));
-		Enemy enemy = enemyFactory.Get((EnemyType)(Random.Range(0,3)));
+	public static void SpawnEnemy (EnemyFactory factory, EnemyType type) {
+		GameTile spawnPoint = instance.board.GetSpawnPoint(Random.Range(0, instance.board.SpawnPointCount));
+		Enemy enemy = factory.Get(type);
 		enemy.SpawnOn(spawnPoint);
-		enemies.Add(enemy);
+		instance.enemies.Add(enemy);
 	}
 }
