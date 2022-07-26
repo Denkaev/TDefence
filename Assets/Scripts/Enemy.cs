@@ -35,14 +35,14 @@ public class Enemy : GameBehavior {
 
 	public override bool GameUpdate () {
 		if (Health <= 0f) {
-			OriginFactory.Reclaim(this);
+            Recycle();
 			return false;
 		}
 
 		progress += Time.deltaTime * progressFactor;
 		while (progress >= 1f) {
 			if (tileTo == null) {
-				OriginFactory.Reclaim(this);
+                Recycle();
 				return false;
 			}
 			progress = (progress - 1f) / progressFactor;
@@ -145,4 +145,9 @@ public class Enemy : GameBehavior {
 		transform.localRotation = direction.GetRotation();
 		progressFactor = 2f * speed;
 	}
+
+    public override void Recycle()
+    {
+        OriginFactory.Reclaim(this);
+    }
 }

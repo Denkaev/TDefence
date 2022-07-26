@@ -80,7 +80,12 @@ public class Game : MonoBehaviour {
 		else if (Input.GetKeyDown(KeyCode.Alpha2)) {
 			selectedTowerType = TowerType.Mortar;
 		}
-        activeScenario.Progress();
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            BeginNewGame();
+        }
+            activeScenario.Progress();
 		enemies.GameUpdate();
 		Physics.SyncTransforms();
 		board.GameUpdate();
@@ -117,4 +122,12 @@ public class Game : MonoBehaviour {
 		enemy.SpawnOn(spawnPoint);
 		instance.enemies.Add(enemy);
 	}
+
+    void BeginNewGame()
+    {
+        enemies.Clear();
+        nonEnemies.Clear();
+        board.Clear();
+        activeScenario = scenario.Begin();
+    }
 }

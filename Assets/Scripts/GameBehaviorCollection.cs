@@ -9,7 +9,8 @@ public class GameBehaviorCollection {
 		behaviors.Add(behavior);
 	}
 
-	public void GameUpdate () {
+	public void GameUpdate ()
+    {
 		for (int i = 0; i < behaviors.Count; i++) {
 			if (!behaviors[i].GameUpdate()) {
 				int lastIndex = behaviors.Count - 1;
@@ -19,4 +20,12 @@ public class GameBehaviorCollection {
 			}
 		}
 	}
+    public void Clear()
+    {
+        for(int i = 0; i < behaviors.Count; i++)
+        {
+            behaviors[i].Recycle();
+        }
+        behaviors.Clear();
+    }
 }
