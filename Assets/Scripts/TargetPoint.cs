@@ -20,7 +20,8 @@ public class TargetPoint : MonoBehaviour {
 		return BufferedCount > 0;
 	}
 
-	public static TargetPoint GetBuffered (int index) {
+	public static TargetPoint GetBuffered (int index)
+    {
 		var target = buffer[index].GetComponent<TargetPoint>();
 		Debug.Assert(target != null, "Targeted non-enemy!", buffer[0]);
 		return target;
@@ -30,7 +31,8 @@ public class TargetPoint : MonoBehaviour {
 
 	public Vector3 Position => transform.position;
 
-	void Awake () {
+	void Awake ()
+    {
 		Enemy = transform.root.GetComponent<Enemy>();
 		Debug.Assert(Enemy != null, "Target point without Enemy root!", this);
 		Debug.Assert(
