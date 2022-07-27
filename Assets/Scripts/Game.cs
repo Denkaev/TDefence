@@ -2,19 +2,8 @@ using UnityEngine;
 
 public class Game : MonoBehaviour
 {
-    [SerializeField, Range(0, 100)]
-    int startingPlayerHealth = 10;
 
-    [SerializeField,Range(1f,10f)]
-    float playSpeed = 1f;
-
-    [SerializeField]
-    GameScenario scenario = default;
-
-
-    int playerHealth;
-
-    GameScenario.State activeScenario;
+    const float pausedTimeScale = 0f;
 
     [SerializeField]
     Vector2Int boardSize = new Vector2Int(11, 11);
@@ -28,6 +17,19 @@ public class Game : MonoBehaviour
     [SerializeField]
     WarFactory warFactory = default;
 
+    [SerializeField]
+    GameScenario scenario = default;
+
+    [SerializeField, Range(0, 100)]
+    int startingPlayerHealth = 10;
+
+    [SerializeField, Range(1f, 10f)]
+    float playSpeed = 1f;
+
+    int playerHealth;
+
+    GameScenario.State activeScenario;
+
     TowerType selectedTowerType;
 
     GameBehaviorCollection enemies = new GameBehaviorCollection();
@@ -37,7 +39,20 @@ public class Game : MonoBehaviour
 
     static Game instance;
 
-    const float pausedTimeScale = 0f;
+    public static void EnemyReachedDestination()
+    {
+        instance.playerHealth -= 1;
+    }
+
+    public static void SpawnEnemy(EnemyFactory factory, EnemyType type)
+    {
+        GameTile spawnPoint = instance.board.GetSpawnPoint(
+            Random.Range(0, instance.board.SpawnPointCount)
+        );
+        Enemy enemy = factory.Get(type);
+        enemy.SpawnOn(spawnPoint);
+        instance.enemies.Add(enemy);
+    }
 
     public static Explosion SpawnExplosion()
     {
@@ -63,6 +78,15 @@ public class Game : MonoBehaviour
         playerHealth = startingPlayerHealth;
         board.Initialize(boardSize, tileContentFactory);
         board.ShowGrid = true;
+        activeScenario = scenario.Begin();
+    }
+
+    void BeginNewGame()
+    {
+        playerHealth = startingPlayerHealth;
+        enemies.Clear();
+        nonEnemies.Clear();
+        board.Clear();
         activeScenario = scenario.Begin();
     }
 
@@ -109,7 +133,8 @@ public class Game : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Time.timeScale = Time.timeScale > pausedTimeScale ? pausedTimeScale : playSpeed;
+            Time.timeScale =
+                Time.timeScale > pausedTimeScale ? pausedTimeScale : playSpeed;
         }
         else if (Time.timeScale > pausedTimeScale)
         {
@@ -126,12 +151,14 @@ public class Game : MonoBehaviour
             Debug.Log("Defeat!");
             BeginNewGame();
         }
+
         if (!activeScenario.Progress() && enemies.IsEmpty)
         {
             Debug.Log("Victory!");
             BeginNewGame();
             activeScenario.Progress();
         }
+
         enemies.GameUpdate();
         Physics.SyncTransforms();
         board.GameUpdate();
@@ -168,27 +195,5 @@ public class Game : MonoBehaviour
                 board.ToggleWall(tile);
             }
         }
-    }
-
-    public static void SpawnEnemy(EnemyFactory factory, EnemyType type)
-    {
-        GameTile spawnPoint = instance.board.GetSpawnPoint(Random.Range(0, instance.board.SpawnPointCount));
-        Enemy enemy = factory.Get(type);
-        enemy.SpawnOn(spawnPoint);
-        instance.enemies.Add(enemy);
-    }
-
-    void BeginNewGame()
-    {
-        playerHealth = startingPlayerHealth;
-        enemies.Clear();
-        nonEnemies.Clear();
-        board.Clear();
-        activeScenario = scenario.Begin();
-    }
-
-    public static void EnemyReachedDestination()
-    {
-        instance.playerHealth -= 1;
     }
 }

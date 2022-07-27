@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c25a071dfdf5bb542ba99179b8e68d04, type: 3}
   m_Name: SML Scenario
   m_EditorClassIdentifier: 
+  cycleSpeedUp: 0.5
+  cycles: 1
   waves:
   - {fileID: 11400000, guid: db34283c2059d8342be3a64855ec7d75, type: 2}
   - {fileID: 11400000, guid: 07cb392c15ab62f4ba92f48de0b05216, type: 2}
