@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Enemy : GameBehavior
 {
+    EnemyAnimator animator;
+
     [SerializeField]
     EnemyAnimationConfig animationConfig = default;
 
@@ -82,6 +84,7 @@ public class Enemy : GameBehavior
         this.speed = speed;
         this.pathOffset = pathOffset;
         Health = health;
+        animator.Play();
     }
 
     public void SpawnOn(GameTile tile)
@@ -172,6 +175,12 @@ public class Enemy : GameBehavior
 
     public override void Recycle()
     {
+        animator.Stop();
         OriginFactory.Reclaim(this);
+    }
+
+    private void Awake()
+    {
+        animator.Configure(model.GetChild(0).gameObject.AddComponent<Animator>(), animationConfig);
     }
 }
