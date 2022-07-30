@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Enemy : GameBehavior
 {
+    [SerializeField]
+    EnemyAnimationConfig animationConfig = default;
 
     [SerializeField]
     Transform model = default;
