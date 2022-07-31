@@ -14,8 +14,9 @@ public struct EnemyAnimator
         var output = AnimationPlayableOutput.Create(graph, "Enemy", animator);
     }
 
-    public void Play()
+    public void Play(float speed)
     {
+        graph.GetOutput(0).GetSourcePlayable().SetSpeed(speed);
         graph.Play();
     }
     public void Stop()

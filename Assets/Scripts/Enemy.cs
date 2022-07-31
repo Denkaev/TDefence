@@ -84,7 +84,7 @@ public class Enemy : GameBehavior
         this.speed = speed;
         this.pathOffset = pathOffset;
         Health = health;
-        animator.Play();
+        animator.Play(speed / scale);
     }
 
     public void SpawnOn(GameTile tile)
