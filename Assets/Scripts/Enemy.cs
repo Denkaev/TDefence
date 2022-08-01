@@ -183,4 +183,9 @@ public class Enemy : GameBehavior
     {
         animator.Configure(model.GetChild(0).gameObject.AddComponent<Animator>(), animationConfig);
     }
+
+    private void OnDestroy()
+    {
+        animator.Destroy();
+    }
 }
