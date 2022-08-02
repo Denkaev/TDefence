@@ -22,6 +22,8 @@ public struct EnemyAnimator
         clip.SetDuration(config.Intro.length);
         mixer.ConnectInput((int)Clip.Intro, clip, 0);
         clip = AnimationClipPlayable.Create(graph, config.Outro);
+        clip.SetDuration(config.Outro.length);
+        clip.Pause();
         mixer.ConnectInput((int)Clip.Outro, clip, 0);
         var output = AnimationPlayableOutput.Create(graph, "Enemy", animator);
         output.SetSourcePlayable(mixer);
@@ -71,6 +73,7 @@ public struct EnemyAnimator
     {
         SetWeight(CurrentClip, 0f);
         SetWeight(Clip.Outro, 1f);
+        GetPlayable(Clip.Outro).Play();
         CurrentClip = Clip.Outro;
     }
 }

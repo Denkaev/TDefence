@@ -51,6 +51,15 @@ public class Enemy : GameBehavior
             }
             animator.PlayMove(speed / Scale);
         }
+        else if (animator.CurrentClip == EnemyAnimator.Clip.Outro)
+        {
+            if (animator.IsDone)
+            {
+                Recycle();
+                return false;
+            }
+            return true;
+        }
         if (Health <= 0f)
         {
             Recycle();
@@ -63,8 +72,8 @@ public class Enemy : GameBehavior
             if (tileTo == null)
             {
                 Game.EnemyReachedDestination();
-                Recycle();
-                return false;
+                animator.PlayOutro();
+                return true;
             }
             progress = (progress - 1f) / progressFactor;
             PrepareNextState();
