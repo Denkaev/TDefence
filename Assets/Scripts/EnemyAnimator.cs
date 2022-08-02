@@ -6,6 +6,7 @@ using UnityEngine.Playables;
 public struct EnemyAnimator
 {
     public enum Clip { Move, Intro, Outro }
+    public Clip CurrentClip { get; private set;}
     AnimationMixerPlayable mixer;
     PlayableGraph graph;
     public void Configure(Animator animator, EnemyAnimationConfig config)
@@ -24,18 +25,48 @@ public struct EnemyAnimator
         output.SetSourcePlayable(mixer);
     }
 
-    public void Play(float speed)
+    public void PlayIntro()
     {
-        graph.GetOutput(0).GetSourcePlayable().SetSpeed(speed);
+        SetWeight(Clip.Intro, 1f);
+        CurrentClip = Clip.Intro;
         graph.Play();
+    }
+    void SetWeight(Clip clip,float weight)
+    {
+        mixer.SetInputWeight((int)clip, weight);
     }
     public void Stop()
     {
         graph.Stop();
     }
 
+    public void Play(float speed)//удалить после 3
+    {
+        graph.GetOutput(0).GetSourcePlayable().SetSpeed(speed);
+        graph.Play();
+    }
+    
     public void Destroy()
     {
         graph.Destroy();
+    }
+    public void PlayMove(float speed)
+    {
+        SetWeight(CurrentClip, 0f);
+        SetWeight(Clip.Move, 1f);
+        GetPlayable(Clip.Move).SetSpeed(speed);
+        CurrentClip = Clip.Move;
+    }
+
+    Playable GetPlayable(Clip clip)
+    {
+        return mixer.GetInput((int)clip);
+    }
+
+    public void PlayOutro()
+    {
+        SetWeight(CurrentClip, 0f);
+        SetWeight(Clip.Outro, 1f);
+        CurrentClip = Clip.Outro;
     }
 }
