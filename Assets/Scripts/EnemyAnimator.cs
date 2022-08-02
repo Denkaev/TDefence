@@ -9,15 +9,17 @@ public struct EnemyAnimator
     public Clip CurrentClip { get; private set;}
     AnimationMixerPlayable mixer;
     PlayableGraph graph;
+    public bool IsDone => GetPlayable(CurrentClip).IsDone();
     public void Configure(Animator animator, EnemyAnimationConfig config)
     {
         graph = PlayableGraph.Create();
         graph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
         mixer = AnimationMixerPlayable.Create(graph, 3);
         var clip = AnimationClipPlayable.Create(graph, config.Move);
+        clip.Pause();
         mixer.ConnectInput((int)Clip.Move, clip, 0);
         clip = AnimationClipPlayable.Create(graph, config.Intro);
-        clip = AnimationClipPlayable.Create(graph, config.Intro);
+        clip.SetDuration(config.Intro.length);
         mixer.ConnectInput((int)Clip.Intro, clip, 0);
         clip = AnimationClipPlayable.Create(graph, config.Outro);
         mixer.ConnectInput((int)Clip.Outro, clip, 0);
@@ -40,11 +42,11 @@ public struct EnemyAnimator
         graph.Stop();
     }
 
-    public void Play(float speed)//удалить после 3
-    {
-        graph.GetOutput(0).GetSourcePlayable().SetSpeed(speed);
-        graph.Play();
-    }
+    //public void Play(float speed)//удалить после 3
+    //{
+    //    graph.GetOutput(0).GetSourcePlayable().SetSpeed(speed);
+    //    graph.Play();
+    //}
     
     public void Destroy()
     {
@@ -54,7 +56,9 @@ public struct EnemyAnimator
     {
         SetWeight(CurrentClip, 0f);
         SetWeight(Clip.Move, 1f);
-        GetPlayable(Clip.Move).SetSpeed(speed);
+        var clip = GetPlayable(Clip.Move);
+        clip.SetSpeed(speed);
+        clip.Play();
         CurrentClip = Clip.Move;
     }
 

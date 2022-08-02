@@ -43,6 +43,14 @@ public class Enemy : GameBehavior
 
     public override bool GameUpdate()
     {
+        if (animator.CurrentClip == EnemyAnimator.Clip.Intro)
+        {
+            if (!animator.IsDone)
+            {
+                return true;
+            }
+            animator.PlayMove(speed / Scale);
+        }
         if (Health <= 0f)
         {
             Recycle();
@@ -84,7 +92,7 @@ public class Enemy : GameBehavior
         this.speed = speed;
         this.pathOffset = pathOffset;
         Health = health;
-        animator.Play(speed / scale);
+        animator.PlayIntro();
     }
 
     public void SpawnOn(GameTile tile)
@@ -154,6 +162,7 @@ public class Enemy : GameBehavior
     void PrepareIntro()
     {
         positionFrom = tileFrom.transform.localPosition;
+        transform.localPosition = positionFrom;
         positionTo = tileFrom.ExitPoint;
         direction = tileFrom.PathDirection;
         directionChange = DirectionChange.None;
