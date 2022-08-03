@@ -5,8 +5,10 @@ using UnityEngine.Playables;
 [System.Serializable]
 public struct EnemyAnimator
 {
+    Clip previousClip;
+    float transitionProgress;
     public enum Clip { Move, Intro, Outro }
-    public Clip CurrentClip { get; private set;}
+    public Clip CurrentClip { get; private set; }
     AnimationMixerPlayable mixer;
     PlayableGraph graph;
     public bool IsDone => GetPlayable(CurrentClip).IsDone();
@@ -35,7 +37,7 @@ public struct EnemyAnimator
         CurrentClip = Clip.Intro;
         graph.Play();
     }
-    void SetWeight(Clip clip,float weight)
+    void SetWeight(Clip clip, float weight)
     {
         mixer.SetInputWeight((int)clip, weight);
     }
@@ -49,19 +51,15 @@ public struct EnemyAnimator
     //    graph.GetOutput(0).GetSourcePlayable().SetSpeed(speed);
     //    graph.Play();
     //}
-    
+
     public void Destroy()
     {
         graph.Destroy();
     }
     public void PlayMove(float speed)
     {
-        SetWeight(CurrentClip, 0f);
-        SetWeight(Clip.Move, 1f);
-        var clip = GetPlayable(Clip.Move);
-        clip.SetSpeed(speed);
-        clip.Play();
-        CurrentClip = Clip.Move;
+        GetPlayable(Clip.Move).SetSpeed(speed);
+        BeginTransition(Clip.Move);
     }
 
     Playable GetPlayable(Clip clip)
@@ -71,9 +69,14 @@ public struct EnemyAnimator
 
     public void PlayOutro()
     {
-        SetWeight(CurrentClip, 0f);
-        SetWeight(Clip.Outro, 1f);
-        GetPlayable(Clip.Outro).Play();
-        CurrentClip = Clip.Outro;
+        BeginTransition(Clip.Outro);
+    }
+
+    void BeginTransition(Clip nextClip)
+    {
+        previousClip = CurrentClip;
+        CurrentClip = nextClip;
+        transitionProgress = 0f;
+        GetPlayable(nextClip).Play();
     }
 }
