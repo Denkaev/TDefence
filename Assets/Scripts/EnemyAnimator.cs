@@ -7,6 +7,7 @@ public struct EnemyAnimator
 {
     Clip previousClip;
     float transitionProgress;
+    const float transitionSpeed = 5f;
     public enum Clip { Move, Intro, Outro }
     public Clip CurrentClip { get; private set; }
     AnimationMixerPlayable mixer;
@@ -36,6 +37,7 @@ public struct EnemyAnimator
         SetWeight(Clip.Intro, 1f);
         CurrentClip = Clip.Intro;
         graph.Play();
+        transitionProgress = 1f;
     }
     void SetWeight(Clip clip, float weight)
     {
@@ -78,5 +80,24 @@ public struct EnemyAnimator
         CurrentClip = nextClip;
         transitionProgress = 0f;
         GetPlayable(nextClip).Play();
+    }
+    public void GameUpdate()
+    {
+        if (transitionProgress >= 0f)
+        {
+            transitionProgress += Time.deltaTime * transitionSpeed;
+            if (transitionProgress >= 1f)
+            {
+                transitionProgress = 1f;
+                SetWeight(CurrentClip, 1f);
+                SetWeight(previousClip, 0f);
+                GetPlayable(previousClip).Pause();
+            }
+            else
+            {
+                SetWeight(CurrentClip, transitionProgress);
+                SetWeight(previousClip, 1f - transitionProgress);
+            }
+        }
     }
 }
