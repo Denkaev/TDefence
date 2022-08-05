@@ -8,7 +8,7 @@ public struct EnemyAnimator
     Clip previousClip;
     float transitionProgress;
     const float transitionSpeed = 5f;
-    public enum Clip { Move, Intro, Outro }
+    public enum Clip { Move, Intro, Outro, Dying }
     public Clip CurrentClip { get; private set; }
     AnimationMixerPlayable mixer;
     PlayableGraph graph;
@@ -17,7 +17,7 @@ public struct EnemyAnimator
     {
         graph = PlayableGraph.Create();
         graph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
-        mixer = AnimationMixerPlayable.Create(graph, 3);
+        mixer = AnimationMixerPlayable.Create(graph, 4);
         var clip = AnimationClipPlayable.Create(graph, config.Move);
         clip.Pause();
         mixer.ConnectInput((int)Clip.Move, clip, 0);
@@ -28,10 +28,18 @@ public struct EnemyAnimator
         clip.SetDuration(config.Outro.length);
         clip.Pause();
         mixer.ConnectInput((int)Clip.Outro, clip, 0);
+        clip = AnimationClipPlayable.Create(graph, config.Dying);
+        clip.SetDuration(config.Dying.length);
+        clip.Pause();
+        mixer.ConnectInput((int)Clip.Dying, clip, 0);
         var output = AnimationPlayableOutput.Create(graph, "Enemy", animator);
         output.SetSourcePlayable(mixer);
     }
 
+    public void PlayDying()
+    {
+        BeginTransition(Clip.Dying);
+    }
     public void PlayIntro()
     {
         SetWeight(Clip.Intro, 1f);
