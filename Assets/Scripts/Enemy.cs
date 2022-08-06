@@ -3,6 +3,18 @@ using UnityEngine;
 public class Enemy : GameBehavior
 {
     EnemyAnimator animator;
+    public bool IsValidTarget => animator.CurrentClip == EnemyAnimator.Clip.Move;
+
+    Collider targetPointCollider;
+
+    public Collider TargetPointCollider
+    {
+        set
+        {
+            Debug.Assert(targetPointCollider = null, "Redefined collider!");
+            targetPointCollider = default;
+        }
+    }
 
     [SerializeField]
     EnemyAnimationConfig animationConfig = default;
@@ -50,8 +62,9 @@ public class Enemy : GameBehavior
                 return true;
             }
             animator.PlayMove(speed / Scale);
+            targetPointCollider.enabled = true;
         }
-        else if (animator.CurrentClip == EnemyAnimator.Clip.Outro)
+        else if (animator.CurrentClip >= EnemyAnimator.Clip.Outro)
         {
             if (animator.IsDone)
             {
@@ -62,8 +75,9 @@ public class Enemy : GameBehavior
         }
         if (Health <= 0f)
         {
-            Recycle();
-            return false;
+            animator.PlayDying();
+            targetPointCollider.enabled = false;
+            return true;
         }
 
         progress += Time.deltaTime * progressFactor;
@@ -73,6 +87,7 @@ public class Enemy : GameBehavior
             {
                 Game.EnemyReachedDestination();
                 animator.PlayOutro();
+                targetPointCollider.enabled = false;
                 return true;
             }
             progress = (progress - 1f) / progressFactor;
@@ -102,6 +117,7 @@ public class Enemy : GameBehavior
         this.pathOffset = pathOffset;
         Health = health;
         animator.PlayIntro();
+        targetPointCollider.enabled = false;
     }
 
     public void SpawnOn(GameTile tile)
@@ -206,4 +222,5 @@ public class Enemy : GameBehavior
     {
         animator.Destroy();
     }
+        
 }
