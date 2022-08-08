@@ -5,6 +5,10 @@ using UnityEngine.Playables;
 [System.Serializable]
 public struct EnemyAnimator
 {
+#if UNITY_EDITOR
+    public bool IsValid => graph.IsValid();
+#endif
+
     Clip previousClip;
     float transitionProgress;
     const float transitionSpeed = 5f;
@@ -108,4 +112,19 @@ public struct EnemyAnimator
             }
         }
     }
+
+#if UNITY_EDITOR
+    public void RestoreAfterHotReload(
+        Animator animator, EnemyAnimationConfig config, float speed
+    )
+    {
+        Configure(animator, config);
+        GetPlayable(Clip.Move).SetSpeed(speed);
+        var clip = GetPlayable(CurrentClip);
+        clip.Play();
+        SetWeight(CurrentClip, 1f);
+        graph.Play();
+    }
+#endif
+
 }
