@@ -7,6 +7,7 @@ public struct EnemyAnimator
 {
 #if UNITY_EDITOR
     public bool IsValid => graph.IsValid();
+    double clipTime;
 #endif
 
     Clip previousClip;
@@ -111,6 +112,9 @@ public struct EnemyAnimator
                 SetWeight(previousClip, 1f - transitionProgress);
             }
         }
+#if UNITY_EDITOR
+        clipTime = GetPlayable(CurrentClip).GetTime();
+#endif
     }
 
 #if UNITY_EDITOR
@@ -120,10 +124,36 @@ public struct EnemyAnimator
     {
         Configure(animator, config);
         GetPlayable(Clip.Move).SetSpeed(speed);
-        var clip = GetPlayable(CurrentClip);
-        clip.Play();
         SetWeight(CurrentClip, 1f);
+        var clip = GetPlayable(CurrentClip);
+        clip.SetTime(clipTime);
+        clip.Play();
         graph.Play();
+        if (CurrentClip == Clip.Intro && hasAppearClip)
+        {
+            clip = GetPlayable(Clip.Appear);
+            clip.SetTime(clipTime);
+            clip.Play();
+            SetWeight(Clip.Appear, 1f);
+        }
+        else if (CurrentClip >= Clip.Outro && hasDisappearClip)
+        {
+            clip = GetPlayable(Clip.Disappear);
+            clip.Play();
+            double delay =
+                GetPlayable(CurrentClip).GetDuration() -
+                clip.GetDuration() -
+                clipTime;
+            if (delay >= 0f)
+            {
+                clip.SetDelay(delay);
+            }
+            else
+            {
+                clip.SetTime(-delay);
+            }
+            SetWeight(Clip.Disappear, 1f);
+        }
     }
 #endif
 
